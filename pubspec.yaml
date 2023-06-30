@@ -80,12 +80,12 @@ flutter:
 # splash screen
 # flutter_native_splash-development.yaml
 flutter_native_splash:
-  color: "#115B73"
+  color: "#D8D8D8"
   image: assets/appstore.png
 
   android_12:
     image: assets/appstore.png
-    icon_background_color: "#115B73"
+    icon_background_color: "#F3F3F3"
   android_gravity: center
   #
   # ios_content_mode can be one of the following iOS UIView.ContentMode (see

@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use
 
-import 'package:care_taker/controllers/ToggleVoiceController.dart';
-import 'package:care_taker/widgets/space.dart';
+import '/controllers/ToggleVoiceController.dart';
+import '/widgets/space.dart';
 import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;

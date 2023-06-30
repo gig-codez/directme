@@ -1,4 +1,4 @@
-import 'package:care_taker/exports/exports.dart';
+import '/exports/exports.dart';
 
 class AddNewLocationController extends Cubit<Marker>{
   AddNewLocationController():super(marker);

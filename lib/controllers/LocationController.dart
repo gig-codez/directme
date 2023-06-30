@@ -1,4 +1,4 @@
-import 'package:care_taker/exports/exports.dart';
+import '/exports/exports.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationController extends Cubit<LatLng> {

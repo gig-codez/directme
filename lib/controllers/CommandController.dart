@@ -1,4 +1,4 @@
-import 'package:care_taker/exports/exports.dart';
+import '/exports/exports.dart';
 import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
 import 'package:http/http.dart' as http;
 class CommandController extends Cubit<Predections>{
