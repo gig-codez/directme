@@ -26,10 +26,10 @@
     <application
         android:label="DirectMe"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <!-- google maps -->
     <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyDIIUClw731TnLo1JLVZi_Yxw59l11g3b0"/>
+               android:value="AIzaSyDHc-KOTdV5Se2XBO99PtnOedmtBUQkj8A"/>
                <!-- end of google maps -->
         <activity
             android:name=".MainActivity"

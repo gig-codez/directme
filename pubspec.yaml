@@ -41,8 +41,9 @@ dependencies:
   speech_to_text: ^6.1.1
   http: ^0.13.6
   flutter_tts: ^3.7.0
-  flutter_google_places_sdk: ^0.3.2+9
   flutter_mapbox_autocomplete: ^2.0.0
+  icons_launcher: ^2.1.2
+  flutter_google_places: ^0.3.0
  
 dev_dependencies:
   flutter_test:
@@ -56,12 +57,13 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_launcher_icons: 
 
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  remove_alpha_ios: true
-  image_path: "assets/appstore.png"
-  min_sdk_android: 21
+icons_launcher:
+  image_path: "assets/d.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -81,10 +83,10 @@ flutter:
 # flutter_native_splash-development.yaml
 flutter_native_splash:
   color: "#D8D8D8"
-  image: assets/appstore.png
+  image: assets/d.png
 
   android_12:
-    image: assets/appstore.png
+    image: assets/d.png
     icon_background_color: "#F3F3F3"
   android_gravity: center
   #

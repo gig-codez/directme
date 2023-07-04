@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -102,13 +103,15 @@ final Map<String, LatLng> geofenceZones = {
   'Yellow Zone': const LatLng(0.7833, 37.4167),
   'Blue Zone': const LatLng(0.7953, 37.3934),
 };
- StreamSubscription<Position>? positionStreamSubscription;
+StreamSubscription<Position>? positionStreamSubscription;
 // computing distance between two points
-double calculateDistance(double startLatitude, startLongitude, double endLatitude, double endLongitude) {
+double calculateDistance(double startLatitude,double startLongitude,
+    double endLatitude, double endLongitude) {
   double distance = 0.0;
-   
-        distance = Geolocator.distanceBetween(startLatitude,
-        startLongitude, endLatitude, endLongitude) / 1000;
+
+  distance = Geolocator.distanceBetween(
+          startLatitude, startLongitude, endLatitude, endLongitude) /
+      1000;
   return distance;
 }
 
@@ -116,8 +119,7 @@ double calculateDistance(double startLatitude, startLongitude, double endLatitud
 StreamSubscription<Position>? positionStream;
 
 void startGeofencing() {
-  positionStream =
-      Geolocator.getPositionStream().listen((Position position) {
+  positionStream = Geolocator.getPositionStream().listen((Position position) {
     final LatLng currentPosition =
         LatLng(position.latitude, position.longitude);
 
@@ -235,7 +237,7 @@ void showNotification(String message) async {
   );
 }
 
-// logic for finding places using voice command        
+// logic for finding places using voice command
 final speech = stt.SpeechToText();
 
 // Check if speech recognition is available
@@ -249,43 +251,57 @@ Future<String> getPlaceName(double latitude, double longitude) async {
   String accessToken = Config.mapboxApiKey;
   String apiUrl =
       'https://api.mapbox.com/geocoding/v5/mapbox.places/$longitude,$latitude.json?access_token=$accessToken';
-
-  var response = await http.get(Uri.parse(apiUrl));
-  if (response.statusCode == 200) {
-    var result = json.decode(response.body);
-    if (result['features'].isNotEmpty) {
-      var placeName = result['features'][0]['place_name'];
-      return placeName;
+  http.Response response = http.Response("", 200);
+  String placeName = "";
+  try {
+    response = await http.get(Uri.parse(apiUrl));
+    if (response.statusCode == 200) {
+      var result = json.decode(response.body);
+      if (result['features'].isNotEmpty) {
+        placeName = result['features'][0]['place_name'];
+        return placeName;
+      } else {
+        placeName = 'Place name not found';
+      }
     } else {
-      throw 'Place name not found';
+      placeName = 'Error occurred while contacting the Mapbox Geocoding API';
+    }
+  } on HandshakeException catch (e) {
+    debugPrint("Handshake exception: ${e.message}");
+  } on http.ClientException catch (e) {
+    debugPrint("Client Exception:${e.message}");
+  }
+  return placeName;
+}
+
+Predections placePredictions = Predections.empty();
+Predections getPlaces(String input, Map<String, dynamic> w) {
+  if (input.isNotEmpty) {
+    String url =
+        "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?access_token=${w['apiKey']}&cachebuster=1566806258853&autocomplete=true&language=${w['language']}&limit=${w['limit']}";
+    // if (widget.location != null) {
+    //   url += "&proximity=${widget.location!.lng}%2C${w['location'].location!.lat}";
+    // }
+    if (w['country'] != null) {
+      url += "&country=${w['country']}";
+    }
+    try {
+      http.get(Uri.parse(url)).then((value) {
+        // placePredictions = Predections.fromRawJson(value.body);
+        var predictions = Predections.fromRawJson(value.body);
+        placePredictions = predictions;
+      });
+    } on HandshakeException catch (e) {
+      debugPrint("Handshake exception: ${e.message}");
+    } on http.ClientException catch (e) {
+      debugPrint("Client Exception:${e.message}");
     }
   } else {
-    throw 'Error occurred while contacting the Mapbox Geocoding API';
-  }
-}
-Predections placePredictions = Predections.empty();
-  Predections getPlaces(String input,Map<String, dynamic> w) {
-      if (input.isNotEmpty) {
-      String url =
-          "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?access_token=${w['apiKey']}&cachebuster=1566806258853&autocomplete=true&language=${w['language']}&limit=${w['limit']}";
-      // if (widget.location != null) {
-      //   url += "&proximity=${widget.location!.lng}%2C${w['location'].location!.lat}";
-      // }
-      if (w['country'] != null) {
-        url += "&country=${w['country']}";
-      }
-       http.get(Uri.parse(url)).then((value) {
-        // placePredictions = Predections.fromRawJson(value.body);
-          var predictions = Predections.fromRawJson(value.body);
-        
-          placePredictions = predictions;
-       });
-      // print(response.body);
-    } else {
     placePredictions = Predections.empty();
-    }
-    return placePredictions;
   }
+  return placePredictions;
+}
+
 // speak out the text
 Future<void> speakNow(String? message) async {
   await flutterTts.setVolume(1);
@@ -300,6 +316,7 @@ Future<void> speakNow(String? message) async {
     }
   }
 }
+
 // pause speaker
 Future<void> pause() async {
   await flutterTts.pause();

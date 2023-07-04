@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use
 
+import 'package:directme/views/home/pages/NearbyPlaces.dart';
+
 import '/controllers/ToggleVoiceController.dart';
 import '/widgets/space.dart';
 import 'package:flutter_mapbox_autocomplete/flutter_mapbox_autocomplete.dart';
@@ -39,11 +41,11 @@ class _PlacesState extends State<Places> {
           if (_searchText.isNotEmpty) {
             if (count == 0) {
               context.read<CommandController>().executeComand(_searchText, {
-                  "apiKey": Config.mapboxApiKey,
-                  "language": "en",
-                  "limit":30,
-                  "country": "UG",
-                });
+                "apiKey": Config.mapboxApiKey,
+                "language": "en",
+                "limit": 30,
+                "country": "UG",
+              });
               Routes.push(
                 context,
                 SearchHelper(
@@ -61,7 +63,7 @@ class _PlacesState extends State<Places> {
                 ),
               );
               setState(() {
-              count++;
+                count++;
                 _isListening = true;
               });
             }
@@ -183,6 +185,17 @@ class _PlacesState extends State<Places> {
                                 fontSize: 15,
                               ),
                             ),
+                            onTap: () {
+                              Routes.push(
+                                context,
+                                NearbyPlacesScreen(
+                                  destination: LatLng(
+                                    double.parse(coordinates.split(",")[1]),
+                                    double.parse(coordinates.split(",")[0]),
+                                  ),
+                                ),
+                              );
+                            },
                           )
                         : const Center(
                             child: CircularProgressIndicator.adaptive(),

@@ -69,6 +69,15 @@ class _SearchHelperState extends State<SearchHelper> {
   String currentValue = "";
   @override
   Widget build(BuildContext context) {
+    if (widget.searchKey!.text.isNotEmpty || widget.searchKey?.text != null) {
+      BlocProvider.of<CommandController>(context)
+          .executeComand(widget.searchKey!.text, {
+        "apiKey": widget.apiKey,
+        "language": widget.language,
+        "limit": widget.limit,
+        "country": widget.country,
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: CustomTextField(
